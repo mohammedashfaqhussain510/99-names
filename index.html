@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>99 Names of Allah — Asma ul Husna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+  --border:#30363d;--border2:#484f58;
+  --text:#e6edf3;--text2:#8b949e;--text3:#656d76;
+  --purple:#a371f7;--purple-dim:#3d2b6b;--purple-light:#d2a8ff;
+  --green:#3fb950;--green-dim:#1b3a21;--green-light:#7ee787;
+  --amber:#d29922;--amber-dim:#3d2e0a;--amber-light:#f0b429;
+  --teal:#39d353;
+}
+body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+.header{text-align:center;padding:2.5rem 1rem 2rem;background:linear-gradient(180deg,#1a1033 0%,var(--bg) 100%);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.header::before{content:'بسم الله الرحمن الرحيم';font-family:'Scheherazade New',serif;font-size:18px;color:var(--purple);opacity:0.4;position:absolute;top:12px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.header h1{font-size:26px;font-weight:300;letter-spacing:2px;color:var(--text);margin-bottom:6px;margin-top:1.5rem}
+.header .arabic-title{font-family:'Scheherazade New',serif;font-size:32px;color:var(--purple-light);margin-bottom:8px;display:block}
+.header p{font-size:13px;color:var(--text2);letter-spacing:1px}
+
+.controls{display:flex;flex-wrap:wrap;gap:8px;padding:1rem 1.25rem;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.search-box{flex:1;min-width:200px;padding:8px 14px;border:1px solid var(--border);border-radius:6px;font-size:14px;background:var(--bg3);color:var(--text);font-family:'Lato',sans-serif}
+.search-box::placeholder{color:var(--text3)}
+.search-box:focus{outline:none;border-color:var(--purple)}
+.mode-btn{padding:7px 16px;border:1px solid var(--border);border-radius:6px;font-size:13px;cursor:pointer;background:var(--bg3);color:var(--text2);font-family:'Lato',sans-serif;transition:all .15s;letter-spacing:.5px}
+.mode-btn.active{background:var(--purple-dim);color:var(--purple-light);border-color:var(--purple)}
+
+.filter-row{display:flex;gap:6px;padding:.75rem 1.25rem;flex-wrap:wrap;background:var(--bg2);border-bottom:1px solid var(--border)}
+.filter-btn{font-size:12px;padding:4px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:transparent;color:var(--text2);font-family:'Lato',sans-serif;transition:all .15s}
+.filter-btn.active{background:var(--purple-dim);color:var(--purple-light);border-color:var(--purple)}
+
+.progress-wrap{padding:.75rem 1.25rem .4rem;background:var(--bg2)}
+.progress-bar{height:3px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--purple-light));border-radius:4px;transition:width .4s ease}
+.progress-label{font-size:11px;color:var(--text3);padding-top:5px;text-align:right;letter-spacing:.5px}
+.stats{display:flex;gap:16px;padding:.5rem 1.25rem .75rem;background:var(--bg2);border-bottom:1px solid var(--border)}
+.stat{font-size:12px;color:var(--text2)}
+.stat span{font-weight:700}
+.stat .green{color:var(--green-light)}
+.stat .amber{color:var(--amber-light)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;padding:1.25rem}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:default;transition:border-color .15s;position:relative}
+.card:hover{border-color:var(--border2)}
+.card.known{border-color:#1b5e30;background:linear-gradient(135deg,var(--bg2),#0d2418)}
+.card.known .num{background:var(--green-dim);color:var(--green-light)}
+.card.learning{border-color:#5a3e00;background:linear-gradient(135deg,var(--bg2),#1e1500)}
+.card.learning .num{background:var(--amber-dim);color:var(--amber-light)}
+.num{font-size:10px;font-weight:700;width:22px;height:22px;border-radius:50%;background:var(--bg3);color:var(--text3);display:flex;align-items:center;justify-content:center;margin-bottom:8px;letter-spacing:.5px}
+.arabic{font-family:'Scheherazade New',serif;font-size:24px;text-align:right;color:var(--purple-light);margin-bottom:6px;line-height:1.5}
+.transliteration{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;letter-spacing:.3px}
+.meaning-en{font-size:12px;color:var(--text2);margin-bottom:2px}
+.meaning-ur{font-size:12px;color:var(--text3);font-style:italic}
+.badge-row{display:flex;gap:6px;margin-top:10px}
+.badge{font-size:10px;padding:3px 9px;border-radius:10px;cursor:pointer;border:1px solid transparent;font-family:'Lato',sans-serif;transition:all .15s;letter-spacing:.3px}
+.badge-learn{background:var(--amber-dim);color:var(--amber-light);border-color:#5a3e00}
+.badge-learn:hover{background:#5a3e00}
+.badge-know{background:var(--green-dim);color:var(--green-light);border-color:#1b5e30}
+.badge-know:hover{background:#1b5e30}
+
+.quiz-area{padding:2rem 1.25rem;display:none;min-height:60vh;align-items:center;justify-content:center;flex-direction:column}
+.quiz-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2.5rem 2rem;text-align:center;max-width:440px;width:100%}
+.quiz-arabic{font-family:'Scheherazade New',serif;font-size:52px;color:var(--purple-light);margin-bottom:1.5rem;line-height:1.3}
+.quiz-num{font-size:12px;color:var(--text3);margin-bottom:1.5rem;letter-spacing:1px}
+.quiz-reveal{padding:9px 24px;border:1px solid var(--border);border-radius:6px;font-size:13px;cursor:pointer;background:var(--bg3);color:var(--text2);font-family:'Lato',sans-serif;transition:all .15s;letter-spacing:.5px}
+.quiz-reveal:hover{border-color:var(--purple);color:var(--purple-light)}
+.quiz-answer{margin-top:1.5rem;display:none}
+.quiz-trans{font-size:20px;font-weight:700;color:var(--text);margin-bottom:5px;letter-spacing:.5px}
+.quiz-en{font-size:14px;color:var(--text2);margin-bottom:4px}
+.quiz-ur{font-size:13px;color:var(--text3);font-style:italic;margin-bottom:1.25rem}
+.quiz-btns{display:flex;gap:8px;justify-content:center}
+.qbtn{padding:9px 18px;border-radius:6px;font-size:13px;cursor:pointer;border:1px solid;font-family:'Lato',sans-serif;transition:all .15s;letter-spacing:.3px}
+.qbtn-learn{background:var(--amber-dim);color:var(--amber-light);border-color:#5a3e00}
+.qbtn-learn:hover{background:#5a3e00}
+.qbtn-know{background:var(--green-dim);color:var(--green-light);border-color:#1b5e30}
+.qbtn-know:hover{background:#1b5e30}
+.empty{text-align:center;padding:3rem;color:var(--text3);font-size:14px}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr 1fr}
+  .arabic{font-size:20px}
+}
+@media(max-width:400px){
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="arabic-title">أسماء الله الحسنى</span>
+  <h1>99 NAMES OF ALLAH</h1>
+  <p>ASMA UL HUSNA — MEMORISE &amp; TRACK YOUR PROGRESS</p>
+</div>
+
+<div class="controls">
+  <input class="search-box" id="search" placeholder="Search by name or meaning..." oninput="render()">
+  <button class="mode-btn active" id="btn-browse" onclick="setMode('browse')">Browse</button>
+  <button class="mode-btn" id="btn-quiz" onclick="setMode('quiz')">Quiz Mode</button>
+</div>
+
+<div id="browse-area">
+  <div class="filter-row">
+    <button class="filter-btn active" id="f-all" onclick="setFilter('all')">All (99)</button>
+    <button class="filter-btn" id="f-learning" onclick="setFilter('learning')">Learning</button>
+    <button class="filter-btn" id="f-known" onclick="setFilter('known')">Known</button>
+    <button class="filter-btn" id="f-unseen" onclick="setFilter('unseen')">Not started</button>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="pbar" style="width:0%"></div></div>
+    <div class="progress-label" id="plabel">0 of 99 memorised</div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="quiz-area" id="quiz-area" style="display:none">
+  <div class="quiz-card">
+    <div class="quiz-num" id="qnum">Name 1 of 99</div>
+    <div class="quiz-arabic" id="qarabic"></div>
+    <button class="quiz-reveal" onclick="revealAnswer()">Show meaning</button>
+    <div class="quiz-answer" id="qanswer">
+      <div class="quiz-trans" id="qtrans"></div>
+      <div class="quiz-en" id="qen"></div>
+      <div class="quiz-ur" id="qur"></div>
+      <div class="quiz-btns">
+        <button class="qbtn qbtn-learn" onclick="markAndNext(false)">Still learning</button>
+        <button class="qbtn qbtn-know" onclick="markAndNext(true)">I know this ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const names=[
+["الرَّحْمَنُ","Ar-Rahman","The Most Gracious","Nihayat Rehm Wala"],
+["الرَّحِيمُ","Ar-Raheem","The Most Merciful","Bara Meherban"],
+["الْمَلِكُ","Al-Malik","The King","Baadshah"],
+["الْقُدُّوسُ","Al-Quddus","The Most Holy","Paak o Pak"],
+["السَّلَامُ","As-Salam","The Source of Peace","Amaan Dene Wala"],
+["الْمُؤْمِنُ","Al-Mumin","The Guardian of Faith","Aiman Karne Wala"],
+["الْمُهَيْمِنُ","Al-Muhaymin","The Protector","Nigehbaan"],
+["الْعَزِيزُ","Al-Aziz","The Almighty","Zabardast Izzat Wala"],
+["الْجَبَّارُ","Al-Jabbar","The Compeller","Qahar / Jabr Karne Wala"],
+["الْمُتَكَبِّرُ","Al-Mutakabbir","The Supreme","Bada'i Wala"],
+["الْخَالِقُ","Al-Khaliq","The Creator","Paida Karne Wala"],
+["الْبَارِئُ","Al-Bari","The Evolver","Banaane Wala"],
+["الْمُصَوِّرُ","Al-Musawwir","The Fashioner","Soorat Dene Wala"],
+["الْغَفَّارُ","Al-Ghaffar","The Repeatedly Forgiving","Baar Baar Maaf Karne Wala"],
+["الْقَهَّارُ","Al-Qahhar","The Subduer","Ghalba Karne Wala"],
+["الْوَهَّابُ","Al-Wahhab","The Bestower","Bakhshne Wala"],
+["الرَّزَّاقُ","Ar-Razzaq","The Provider","Rizq Dene Wala"],
+["الْفَتَّاحُ","Al-Fattah","The Opener","Raahen Kholne Wala"],
+["الْعَلِيمُ","Al-Aleem","The All-Knowing","Sab Jaanne Wala"],
+["الْقَابِضُ","Al-Qabid","The Withholder","Rokne Wala"],
+["الْبَاسِطُ","Al-Basit","The Extender","Phailaane Wala"],
+["الْخَافِضُ","Al-Khafid","The Abaser","Neecha Karne Wala"],
+["الرَّافِعُ","Ar-Rafi","The Exalter","Ooncha Karne Wala"],
+["الْمُعِزُّ","Al-Muizz","The Bestower of Honour","Izzat Dene Wala"],
+["الْمُذِلُّ","Al-Mudhill","The Humiliator","Zillat Dene Wala"],
+["السَّمِيعُ","As-Sami","The All-Hearing","Sunne Wala"],
+["الْبَصِيرُ","Al-Basir","The All-Seeing","Dekhne Wala"],
+["الْحَكَمُ","Al-Hakam","The Judge","Faislah Karne Wala"],
+["الْعَدْلُ","Al-Adl","The Just","Insaaf Karne Wala"],
+["اللَّطِيفُ","Al-Latif","The Subtle","Meherbaan o Narm"],
+["الْخَبِيرُ","Al-Khabir","The All-Aware","Khabar Rakhne Wala"],
+["الْحَلِيمُ","Al-Halim","The Forbearing","Burdbaar"],
+["الْعَظِيمُ","Al-Azim","The Magnificent","Azmat Wala"],
+["الْغَفُورُ","Al-Ghafur","The All-Forgiving","Maafi Dene Wala"],
+["الشَّكُورُ","Ash-Shakur","The Appreciative","Qadar Karne Wala"],
+["الْعَلِيُّ","Al-Ali","The Most High","Buland"],
+["الْكَبِيرُ","Al-Kabir","The Most Great","Bada"],
+["الْحَفِيظُ","Al-Hafiz","The Preserver","Hifazat Karne Wala"],
+["الْمُقِيتُ","Al-Muqit","The Sustainer","Gar Karne Wala"],
+["الْحَسِيبُ","Al-Hasib","The Reckoner","Hisaab Karne Wala"],
+["الْجَلِيلُ","Al-Jalil","The Majestic","Jalaal Wala"],
+["الْكَرِيمُ","Al-Karim","The Generous","Karamaat Wala"],
+["الرَّقِيبُ","Ar-Raqib","The Watchful","Nazar Rakhne Wala"],
+["الْمُجِيبُ","Al-Mujib","The Responsive","Duaa Sunne Wala"],
+["الْوَاسِعُ","Al-Wasi","The All-Encompassing","Wusat Wala"],
+["الْحَكِيمُ","Al-Hakim","The All-Wise","Hikmat Wala"],
+["الْوَدُودُ","Al-Wadud","The Loving","Mohabbat Karne Wala"],
+["الْمَجِيدُ","Al-Majid","The Glorious","Baajad"],
+["الْبَاعِثُ","Al-Baith","The Resurrector","Uthane Wala"],
+["الشَّهِيدُ","Ash-Shahid","The Witness","Gawaah"],
+["الْحَقُّ","Al-Haqq","The Truth","Sachcha"],
+["الْوَكِيلُ","Al-Wakil","The Trustee","Zimmedaar"],
+["الْقَوِيُّ","Al-Qawiyy","The All-Strong","Quwwat Wala"],
+["الْمَتِينُ","Al-Mateen","The Firm","Mazboot"],
+["الْوَلِيُّ","Al-Waliyy","The Protecting Friend","Wali / Dost"],
+["الْحَمِيدُ","Al-Hamid","The Praiseworthy","Tarif ke Laiq"],
+["الْمُحْصِيُ","Al-Muhsi","The Accountant","Ginne Wala"],
+["الْمُبْدِئُ","Al-Mubdi","The Originator","Pehli Baar Banaane Wala"],
+["الْمُعِيدُ","Al-Mueed","The Restorer","Wapas Laane Wala"],
+["الْمُحْيِي","Al-Muhyi","The Giver of Life","Zindagi Dene Wala"],
+["الْمُمِيتُ","Al-Mumit","The Taker of Life","Maut Dene Wala"],
+["الْحَيُّ","Al-Hayy","The Ever-Living","Hamesha Zinda"],
+["الْقَيُّومُ","Al-Qayyum","The Self-Subsisting","Qaim Rakhne Wala"],
+["الْوَاجِدُ","Al-Wajid","The Finder","Paane Wala"],
+["الْمَاجِدُ","Al-Majid","The Noble","Shareef"],
+["الْوَاحِدُ","Al-Wahid","The Unique","Akela"],
+["الْأَحَدُ","Al-Ahad","The One","Yagana"],
+["الصَّمَدُ","As-Samad","The Eternal","Begharj"],
+["الْقَادِرُ","Al-Qadir","The Capable","Qaadir"],
+["الْمُقْتَدِرُ","Al-Muqtadir","The All-Powerful","Qadar Rakhne Wala"],
+["الْمُقَدِّمُ","Al-Muqaddim","The Expediter","Aage Karne Wala"],
+["الْمُؤَخِّرُ","Al-Muakhkhir","The Delayer","Peechhe Karne Wala"],
+["الْأَوَّلُ","Al-Awwal","The First","Pehla"],
+["الْآخِرُ","Al-Akhir","The Last","Aakhri"],
+["الظَّاهِرُ","Az-Zahir","The Manifest","Zaahir"],
+["الْبَاطِنُ","Al-Batin","The Hidden","Chhupa Hua"],
+["الْوَالِي","Al-Wali","The Governor","Hukmraan"],
+["الْمُتَعَالِي","Al-Mutaali","The Supreme","Bulandtar"],
+["الْبَرُّ","Al-Barr","The Good","Bhalaai Karne Wala"],
+["التَّوَّابُ","At-Tawwab","The Acceptor of Repentance","Tauba Qabool Karne Wala"],
+["الْمُنْتَقِمُ","Al-Muntaqim","The Avenger","Badla Lene Wala"],
+["الْعَفُوُّ","Al-Afuww","The Pardoner","Muaf Karne Wala"],
+["الرَّؤُوفُ","Ar-Rauf","The Compassionate","Shafqat Karne Wala"],
+["مَالِكُ الْمُلْكِ","Malik-ul-Mulk","Owner of all Sovereignty","Badshahi ka Maalik"],
+["ذُو الْجَلَالِ وَالْإِكْرَامِ","Dhul-Jalali wal-Ikram","Lord of Majesty","Azmat o Ikram Wala"],
+["الْمُقْسِطُ","Al-Muqsit","The Equitable","Insaaf Wala"],
+["الْجَامِعُ","Al-Jami","The Gatherer","Jama Karne Wala"],
+["الْغَنِيُّ","Al-Ghani","The Self-Sufficient","Be-Niyaz"],
+["الْمُغْنِي","Al-Mughni","The Enricher","Maal Dene Wala"],
+["الْمَانِعُ","Al-Mani","The Preventer","Rokne Wala"],
+["الضَّارُّ","Ad-Darr","The Distresser","Nuqsan Karne Wala"],
+["النَّافِعُ","An-Nafi","The Propitious","Faida Karne Wala"],
+["النُّورُ","An-Nur","The Light","Noor"],
+["الْهَادِي","Al-Hadi","The Guide","Raah Dikhaane Wala"],
+["الْبَدِيعُ","Al-Badi","The Incomparable","Anokha"],
+["الْبَاقِي","Al-Baqi","The Ever-Enduring","Hamesha Rehne Wala"],
+["الْوَارِثُ","Al-Warith","The Inheritor","Waris"],
+["الرَّشِيدُ","Ar-Rashid","The Guide to Right Path","Seedhi Raah Wala"],
+["الصَّبُورُ","As-Sabur","The Patient","Sabr Karne Wala"]
+];
+
+let status=JSON.parse(localStorage.getItem('allah99_status')||'{}');
+let mode='browse',filter='all',quizQueue=[],qIdx=0,quizCard=null;
+
+function save(){try{localStorage.setItem('allah99_status',JSON.stringify(status))}catch(e){}}
+function getStatus(i){return status[i]||'unseen'}
+
+function setMode(m){
+  mode=m;
+  document.getElementById('btn-browse').className='mode-btn'+(m==='browse'?' active':'');
+  document.getElementById('btn-quiz').className='mode-btn'+(m==='quiz'?' active':'');
+  document.getElementById('browse-area').style.display=m==='browse'?'block':'none';
+  const qa=document.getElementById('quiz-area');
+  qa.style.display=m==='quiz'?'flex':'none';
+  if(m==='quiz')startQuiz();
+}
+
+function setFilter(f){
+  filter=f;
+  ['all','learning','known','unseen'].forEach(x=>{
+    document.getElementById('f-'+x).className='filter-btn'+(x===f?' active':'');
+  });
+  render();
+}
+
+function render(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const known=names.filter((_,i)=>getStatus(i)==='known').length;
+  const learning=names.filter((_,i)=>getStatus(i)==='learning').length;
+  const pct=Math.round(known/99*100);
+  document.getElementById('pbar').style.width=pct+'%';
+  document.getElementById('plabel').textContent=known+' of 99 memorised ('+pct+'%)';
+  document.getElementById('stats').innerHTML=
+    `<div class="stat">Known: <span class="green">${known}</span></div>
+     <div class="stat">Learning: <span class="amber">${learning}</span></div>
+     <div class="stat">Not started: <span>${99-known-learning}</span></div>`;
+
+  const filtered=names.filter((n,i)=>{
+    const matchQ=!q||n[1].toLowerCase().includes(q)||n[2].toLowerCase().includes(q)||n[3].toLowerCase().includes(q)||n[0].includes(q);
+    const s=getStatus(i);
+    const matchF=filter==='all'||(filter==='known'&&s==='known')||(filter==='learning'&&s==='learning')||(filter==='unseen'&&s==='unseen');
+    return matchQ&&matchF;
+  });
+
+  const grid=document.getElementById('grid');
+  if(!filtered.length){grid.innerHTML='<div class="empty">No names found.</div>';return;}
+  grid.innerHTML=filtered.map(n=>{
+    const i=names.indexOf(n);
+    const s=getStatus(i);
+    return `<div class="card ${s}">
+      <div class="num">${i+1}</div>
+      <div class="arabic">${n[0]}</div>
+      <div class="transliteration">${n[1]}</div>
+      <div class="meaning-en">${n[2]}</div>
+      <div class="meaning-ur">${n[3]}</div>
+      <div class="badge-row">
+        <span class="badge badge-learn" onclick="mark(${i},'learning')">Learning</span>
+        <span class="badge badge-know" onclick="mark(${i},'known')">Known ✓</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function mark(i,s){
+  status[i]=status[i]===s?'unseen':s;
+  save();render();
+}
+
+function startQuiz(){
+  quizQueue=names.map((_,i)=>i).sort(()=>Math.random()-.5);
+  qIdx=0;showQ();
+}
+
+function showQ(){
+  if(qIdx>=quizQueue.length){quizQueue=names.map((_,i)=>i).sort(()=>Math.random()-.5);qIdx=0;}
+  const i=quizQueue[qIdx];
+  document.getElementById('qnum').textContent='Name '+(qIdx+1)+' of 99';
+  document.getElementById('qarabic').textContent=names[i][0];
+  document.getElementById('qtrans').textContent=names[i][1];
+  document.getElementById('qen').textContent=names[i][2];
+  document.getElementById('qur').textContent=names[i][3];
+  document.getElementById('qanswer').style.display='none';
+  quizCard=i;
+}
+
+function revealAnswer(){document.getElementById('qanswer').style.display='block'}
+
+function markAndNext(known){
+  if(quizCard!==null){status[quizCard]=known?'known':'learning';save();}
+  qIdx++;showQ();
+}
+
+render();
+</script>
+</body>
+</html>
